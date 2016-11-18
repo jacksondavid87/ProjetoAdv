@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoProcessosBean.consultar}" />
+			<f:viewAction action="#{gestaoProcessosBean.consultarUsuario}" />
+		</f:metadata>
+
+		<h1>Gestão de Processos</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoProcessosBean.prepararNovoCadastro}"
+						process="@this" update="processo-dialog"
+						oncomplete="PF('edicaoProcessoDialog').show()">
+						<p:resetInput target="processo-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="processo-dialog"
+						oncomplete="PF('edicaoProcessoDialog').show()"
+						disabled="#{gestaoProcessosBean.processoSelecionado == null}">
+						<p:resetInput target="processo-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoProcessosBean.processoSelecionado}"
+							target="#{gestaoProcessosBean.processoEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="processos-table msgs toolbar"
+						action="#{gestaoProcessosBean.excluir()}"
+						rendered="#{validaUsuario.validaUser()}"
+						disabled="#{gestaoProcessosBean.processoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Processo?" />
+
+					</p:commandButton>
+
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoProcessosBean.todosProcessos}"
+				var="processo" emptyMessage="Nenhum Processo cadastrado." rows="5"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="processos-table"
+				selection="#{gestaoProcessosBean.processoSelecionado}"
+				selectionMode="single" rowKey="#{processo.pro_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="80">
+					<h:outputText value="#{processo.pro_codigo}" />
+				</p:column>
+				<p:column headerText="Ação" sortBy="#{processo.pro_acao}">
+					<h:outputText value="#{processo.pro_acao}" />
+				</p:column>
+				<p:column headerText="Autor" width="350">
+					<h:outputText value="#{processo.pro_autor}" />
+				</p:column>
+				<p:column headerText="Réu" width="350">
+					<h:outputText value="#{processo.pro_reu}" />
+				</p:column>
+				<p:column headerText="Número do Processo">
+					<h:outputText value="#{processo.pro_num_processo}" />
+				</p:column>
+				<p:column headerText="Vara">
+					<h:outputText value="#{processo.pro_vara}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Processo" widgetVar="edicaoProcessoDialog"
+				id="processo-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="processo-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+					<p:outputLabel value="Ação" for="acao" />
+					<p:inputText id="acao" size="60" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_acao}"
+						disabled="#{gestaoProcessosBean.validaAcao()}" />
+
+					<p:outputLabel value="Autor" for="autor" />
+					<p:inputText id="autor" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_autor}"
+						disabled="#{gestaoProcessosBean.validaAutor()}"/>
+
+					<p:outputLabel value="Réu" for="reu" />
+					<p:inputText id="reu" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_reu}"
+						disabled="#{gestaoProcessosBean.validaReu()}"/>
+
+					<p:outputLabel value="Número do Processo" for="numProcesso" />
+					<p:inputText id="numProcesso" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_num_processo}"
+						disabled="#{gestaoProcessosBean.validaNumProcesso()}"/>
+
+					<p:outputLabel value="Vara" for="vara" />
+					<p:inputText id="vara" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_vara}"
+						disabled="#{gestaoProcessosBean.validaVara()}"/>
+
+					<p:outputLabel value="Valor do Honorário" for="honorario" />
+					<p:inputNumber symbol="R$ " decimalSeparator=","
+						thousandSeparator="." id="honorario"
+						value="#{gestaoProcessosBean.processoEdicao.pro_honorario}"
+						disabled="#{gestaoProcessosBean.validaValorAcao()}"/>
+
+					<p:outputLabel value="Status do Processo" for="status" />
+					<p:inputText id="status" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_status}"
+						disabled="#{gestaoProcessosBean.validaStatus()}"/>
+
+					<p:outputLabel value="Valor Pago" for="valorPago" />
+					<p:inputNumber symbol="R$ " decimalSeparator=","
+						thousandSeparator="." id="valorPago"
+						value="#{gestaoProcessosBean.processoEdicao.pro_valor_pago}"
+						disabled="#{gestaoProcessosBean.validaValorPago()}"/>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoProcessosBean.salvar()}" process="processo-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoProcessoDialog').hide()" />
+
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

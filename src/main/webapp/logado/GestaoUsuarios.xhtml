@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoUsuariosBean.consultar}" />
+		</f:metadata>
+
+		<h1>Gestão de Usuários</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoUsuariosBean.prepararNovoCadastro}"
+						process="@this" update="usuario-dialog"
+						oncomplete="PF('edicaoUsuarioDialog').show()">
+						<p:resetInput target="usuario-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="usuario-dialog"
+						rendered="#{validaUsuario.validaUser()}"
+						oncomplete="PF('edicaoUsuarioDialog').show()"
+						enable="#{usuarioLogin.tipo.equals('master')}"
+						disabled="#{gestaoUsuariosBean.usuarioSelecionado == null}">
+						<p:resetInput target="usuario-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoUsuariosBean.usuarioSelecionado}"
+							target="#{gestaoUsuariosBean.usuarioEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="usuarios-table msgs toolbar"
+						rendered="#{validaUsuario.validaUser()}"
+						action="#{gestaoUsuariosBean.excluir()}"
+						disabled="#{gestaoUsuariosBean.usuarioSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Usuario?" />
+
+					</p:commandButton>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoUsuariosBean.todosUsuarios}"
+				var="usuario" emptyMessage="Nenhum Usuário cadastrado." rows="5"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="usuarios-table"
+				selection="#{gestaoUsuariosBean.usuarioSelecionado}"
+				selectionMode="single" rowKey="#{usuario.usu_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="80">
+					<h:outputText value="#{usuario.usu_codigo}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{usuario.usu_nome}" width="350">
+					<h:outputText value="#{usuario.usu_nome}" />
+				</p:column>
+				<p:column headerText="Tipo" width="350">
+					<h:outputText value="#{usuario.usu_tipo}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Usuário" widgetVar="edicaoUsuarioDialog"
+				id="usuario-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="usuario-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" size="40" maxlength="80"
+						value="#{gestaoUsuariosBean.usuarioEdicao.usu_nome}" />
+
+					<p:outputLabel value="Tipo" for="tipo" />
+					<p:selectOneMenu id="tipo"
+						value="#{gestaoUsuariosBean.usuarioEdicao.usu_tipo}">
+						<f:selectItem itemLabel="master" itemValue="master" />
+						<f:selectItem itemLabel="comum" itemValue="comum" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Senha" for="senha" />
+					<p:password id="senha" size="40" maxlength="80"
+						value="#{gestaoUsuariosBean.usuarioEdicao.usu_senha}">
+						
+					</p:password>
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoUsuariosBean.salvar()}" process="usuario-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
+
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
