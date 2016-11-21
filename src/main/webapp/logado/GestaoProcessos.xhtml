@@ -96,47 +96,65 @@
 				<h:panelGrid columns="2" id="painel-dialog">
 
 					<p:outputLabel value="Ação" for="acao" />
-					<p:inputText id="acao" size="60" maxlength="80"
+					<p:inputText id="acao" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_acao}"
 						disabled="#{gestaoProcessosBean.validaAcao()}" />
 
 					<p:outputLabel value="Autor" for="autor" />
 					<p:inputText id="autor" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_autor}"
-						disabled="#{gestaoProcessosBean.validaAutor()}"/>
+						disabled="#{gestaoProcessosBean.validaAutor()}" />
 
 					<p:outputLabel value="Réu" for="reu" />
 					<p:inputText id="reu" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_reu}"
-						disabled="#{gestaoProcessosBean.validaReu()}"/>
+						disabled="#{gestaoProcessosBean.validaReu()}" />
 
 					<p:outputLabel value="Número do Processo" for="numProcesso" />
 					<p:inputText id="numProcesso" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_num_processo}"
-						disabled="#{gestaoProcessosBean.validaNumProcesso()}"/>
+						disabled="#{gestaoProcessosBean.validaNumProcesso()}" />
 
 					<p:outputLabel value="Vara" for="vara" />
 					<p:inputText id="vara" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_vara}"
-						disabled="#{gestaoProcessosBean.validaVara()}"/>
+						disabled="#{gestaoProcessosBean.validaVara()}" />
 
 					<p:outputLabel value="Valor do Honorário" for="honorario" />
 					<p:inputNumber symbol="R$ " decimalSeparator=","
 						thousandSeparator="." id="honorario"
 						value="#{gestaoProcessosBean.processoEdicao.pro_honorario}"
-						disabled="#{gestaoProcessosBean.validaValorAcao()}"/>
+						disabled="#{gestaoProcessosBean.validaValorAcao()}" />
+
+					<p:outputLabel value="Observação valor Honorário"
+						for="obsHonorario" />
+					<p:inputText id="obsHonorario" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_obs_honorario}" />
 
 					<p:outputLabel value="Status do Processo" for="status" />
 					<p:inputText id="status" size="40" maxlength="80"
 						value="#{gestaoProcessosBean.processoEdicao.pro_status}"
-						disabled="#{gestaoProcessosBean.validaStatus()}"/>
+						disabled="#{gestaoProcessosBean.validaStatus()}" />
 
 					<p:outputLabel value="Valor Pago" for="valorPago" />
 					<p:inputNumber symbol="R$ " decimalSeparator=","
 						thousandSeparator="." id="valorPago"
 						value="#{gestaoProcessosBean.processoEdicao.pro_valor_pago}"
-						disabled="#{gestaoProcessosBean.validaValorPago()}"/>
+						disabled="#{gestaoProcessosBean.validaValorPago()}" />
 
+					<p:outputLabel value="Observação valor Pago" for="obsPago" />
+					<p:inputText id="obsPago" size="40" maxlength="80"
+						value="#{gestaoProcessosBean.processoEdicao.pro_obs_valor_pago}" />
+
+					<p:outputLabel value="Andamento do Processo" for="obs" />
+					<p:inputTextarea rows="5" cols="39" counter="display" id="obs"
+						maxlength="500" counterTemplate="{0} Caracteres restantes."
+						autoResize="false"
+						value="#{gestaoProcessosBean.processoEdicao.pro_andamento}" />
+					<h:outputLabel />
+					<h:outputText id="display" />
+
+					<h:outputLabel />
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{gestaoProcessosBean.salvar()}" process="processo-dialog"
 						update="msgs-dialog painel-dialog"

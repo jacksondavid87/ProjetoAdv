@@ -44,6 +44,12 @@ public class Processo implements Serializable, SampleEntity {
 
 	private Double pro_valor_pago;
 
+	private String pro_andamento;
+
+	private String pro_obs_honorario;
+
+	private String pro_obs_valor_pago;
+
 	@ManyToOne
 	@JoinColumn(name = "usu_codigo")
 	private Usuario usuario;
@@ -145,16 +151,43 @@ public class Processo implements Serializable, SampleEntity {
 		this.pro_ativo = pro_ativo;
 	}
 
+	public String getPro_andamento() {
+		return pro_andamento;
+	}
+
+	public void setPro_andamento(String pro_andamento) {
+		this.pro_andamento = pro_andamento;
+	}
+
+	public String getPro_obs_honorario() {
+		return pro_obs_honorario;
+	}
+
+	public void setPro_obs_honorario(String pro_obs_honorario) {
+		this.pro_obs_honorario = pro_obs_honorario;
+	}
+
+	public String getPro_obs_valor_pago() {
+		return pro_obs_valor_pago;
+	}
+
+	public void setPro_obs_valor_pago(String pro_obs_valor_pago) {
+		this.pro_obs_valor_pago = pro_obs_valor_pago;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((pro_acao == null) ? 0 : pro_acao.hashCode());
+		result = prime * result + ((pro_andamento == null) ? 0 : pro_andamento.hashCode());
 		result = prime * result + (pro_ativo ? 1231 : 1237);
 		result = prime * result + ((pro_autor == null) ? 0 : pro_autor.hashCode());
 		result = prime * result + (int) (pro_codigo ^ (pro_codigo >>> 32));
 		result = prime * result + ((pro_honorario == null) ? 0 : pro_honorario.hashCode());
 		result = prime * result + ((pro_num_processo == null) ? 0 : pro_num_processo.hashCode());
+		result = prime * result + ((pro_obs_honorario == null) ? 0 : pro_obs_honorario.hashCode());
+		result = prime * result + ((pro_obs_valor_pago == null) ? 0 : pro_obs_valor_pago.hashCode());
 		result = prime * result + ((pro_reu == null) ? 0 : pro_reu.hashCode());
 		result = prime * result + ((pro_status == null) ? 0 : pro_status.hashCode());
 		result = prime * result + ((pro_valor_pago == null) ? 0 : pro_valor_pago.hashCode());
@@ -177,6 +210,11 @@ public class Processo implements Serializable, SampleEntity {
 				return false;
 		} else if (!pro_acao.equals(other.pro_acao))
 			return false;
+		if (pro_andamento == null) {
+			if (other.pro_andamento != null)
+				return false;
+		} else if (!pro_andamento.equals(other.pro_andamento))
+			return false;
 		if (pro_ativo != other.pro_ativo)
 			return false;
 		if (pro_autor == null) {
@@ -195,6 +233,16 @@ public class Processo implements Serializable, SampleEntity {
 			if (other.pro_num_processo != null)
 				return false;
 		} else if (!pro_num_processo.equals(other.pro_num_processo))
+			return false;
+		if (pro_obs_honorario == null) {
+			if (other.pro_obs_honorario != null)
+				return false;
+		} else if (!pro_obs_honorario.equals(other.pro_obs_honorario))
+			return false;
+		if (pro_obs_valor_pago == null) {
+			if (other.pro_obs_valor_pago != null)
+				return false;
+		} else if (!pro_obs_valor_pago.equals(other.pro_obs_valor_pago))
 			return false;
 		if (pro_reu == null) {
 			if (other.pro_reu != null)

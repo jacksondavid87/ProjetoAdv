@@ -17,10 +17,6 @@
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
-<!-- 
-String usuario = "admin";
-String senha = "J@ckson2580"; 
--->
 
 	</persistence-unit>
 </persistence>
