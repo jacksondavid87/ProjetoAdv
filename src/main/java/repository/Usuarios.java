@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 
 import model.Usuario;
 
@@ -21,7 +25,16 @@ public class Usuarios implements Serializable {
 	}
 	
 	public List<Usuario> todos() {
-		return manager.createQuery("from Usuario", Usuario.class).getResultList();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Usuario> criteriaQuery = builder.createQuery(Usuario.class);
+		
+		Root<Usuario> usuario = criteriaQuery.from(Usuario.class);
+		Order order = builder.asc(usuario.<String>get("usu_nome"));
+		criteriaQuery.select(usuario);
+		criteriaQuery.orderBy(order);
+		
+		return manager.createQuery(criteriaQuery).getResultList();
+		//return manager.createQuery("from Usuario", Usuario.class).getResultList();
 	}
 	
 	public Usuario guardar(Usuario usuario) {

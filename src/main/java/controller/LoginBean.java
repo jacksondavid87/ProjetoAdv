@@ -59,7 +59,7 @@ public class LoginBean {
 					//System.out.println(usu.isLogado());
 					this.usu.setTipo(u.getUsu_tipo());
 					this.usu.setId((int)u.getUsu_codigo());
-					return "/logado/GestaoUsuarios?faces-redirect=true";
+					return "/logado/GestaoProcessos?faces-redirect=true";
 			} else {
 				FacesMessage mensagem = new FacesMessage("Usuário/senha inválido!");
 				mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
